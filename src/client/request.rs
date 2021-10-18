@@ -42,17 +42,19 @@ impl<W> Request<W> {
     #[inline]
     pub fn method(&self) -> Method { self.method.clone() }
 
-    /// Set the write timeout.
-    #[inline]
-    pub fn set_write_timeout(&self, dur: Option<Duration>) -> io::Result<()> {
-        self.message.set_write_timeout(dur)
-    }
+    // Following are commented because options SO_SNDTIMEO and SO_RCVTIMEO are not supported on solaris 10
 
-    /// Set the read timeout.
-    #[inline]
-    pub fn set_read_timeout(&self, dur: Option<Duration>) -> io::Result<()> {
-        self.message.set_read_timeout(dur)
-    }
+    // /// Set the write timeout.
+    // #[inline]
+    // pub fn set_write_timeout(&self, dur: Option<Duration>) -> io::Result<()> {
+    //     self.message.set_write_timeout(dur)
+    // }
+
+    // /// Set the read timeout.
+    // #[inline]
+    // pub fn set_read_timeout(&self, dur: Option<Duration>) -> io::Result<()> {
+    //     self.message.set_read_timeout(dur)
+    // }
 }
 
 impl Request<Fresh> {

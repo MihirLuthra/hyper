@@ -180,15 +180,17 @@ impl Client {
         self.read_timeout = dur;
     }
 
-    /// Set the write timeout value for all requests.
-    pub fn set_write_timeout(&mut self, dur: Option<Duration>) {
-        self.write_timeout = dur;
-    }
+    // Following are commented because options SO_SNDTIMEO and SO_RCVTIMEO are not supported on solaris 10
 
-    /// Build a Get request.
-    pub fn get<U: IntoUrl>(&self, url: U) -> RequestBuilder {
-        self.request(Method::Get, url)
-    }
+    // /// Set the write timeout value for all requests.
+    // pub fn set_write_timeout(&mut self, dur: Option<Duration>) {
+    //     self.write_timeout = dur;
+    // }
+
+    // /// Build a Get request.
+    // pub fn get<U: IntoUrl>(&self, url: U) -> RequestBuilder {
+    //     self.request(Method::Get, url)
+    // }
 
     /// Build a Head request.
     pub fn head<U: IntoUrl>(&self, url: U) -> RequestBuilder {
@@ -320,8 +322,11 @@ impl<'a> RequestBuilder<'a> {
                 Request::with_headers_and_message(method.clone(), url.clone(), headers, message)
             };
 
-            try!(req.set_write_timeout(client.write_timeout));
-            try!(req.set_read_timeout(client.read_timeout));
+            // SO_SNDTIMEO/SO_RCVTIMEO option is used with setsockopt() to achieve the following
+            // but these options are not available on solaris 10 so were disabled
+            //
+            // try!(req.set_write_timeout(client.write_timeout));
+            // try!(req.set_read_timeout(client.read_timeout));
 
             match (can_have_body, body.as_ref()) {
                 (true, Some(body)) => match body.size() {
