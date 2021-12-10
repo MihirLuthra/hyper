@@ -38,7 +38,7 @@ pub(super) enum Kind {
     #[allow(unused)]
     Connect,
     /// Error creating a TcpListener.
-    #[cfg(all(feature = "tcp", feature = "server"))]
+    #[cfg(all(any(feature = "tcp", feature = "tcp-sgx"), feature = "server"))]
     Listen,
     /// Error accepting on an Incoming stream.
     #[cfg(any(feature = "http1", feature = "http2"))]
@@ -273,7 +273,7 @@ impl Error {
         Error::new(Kind::Io).with(cause)
     }
 
-    #[cfg(all(feature = "server", feature = "tcp"))]
+    #[cfg(all(feature = "server", any(feature = "tcp", feature = "tcp-sgx")))]
     pub(super) fn new_listen<E: Into<Cause>>(cause: E) -> Error {
         Error::new(Kind::Listen).with(cause)
     }
@@ -428,7 +428,7 @@ impl Error {
             Kind::ChannelClosed => "channel closed",
             Kind::Connect => "error trying to connect",
             Kind::Canceled => "operation was canceled",
-            #[cfg(all(feature = "server", feature = "tcp"))]
+            #[cfg(all(feature = "server", any(feature = "tcp", feature = "tcp-sgx")))]
             Kind::Listen => "error creating server listener",
             #[cfg(any(feature = "http1", feature = "http2"))]
             #[cfg(feature = "server")]

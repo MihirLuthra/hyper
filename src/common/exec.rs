@@ -44,11 +44,11 @@ impl Exec {
     {
         match *self {
             Exec::Default => {
-                #[cfg(feature = "tcp")]
+                #[cfg(any(feature = "tcp", feature = "tcp-sgx"))]
                 {
                     tokio::task::spawn(fut);
                 }
-                #[cfg(not(feature = "tcp"))]
+                #[cfg(not(all(feature = "tcp", feature = "tcp-sgx")))]
                 {
                     // If no runtime, we need an executor!
                     panic!("executor must be set")

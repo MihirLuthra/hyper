@@ -36,7 +36,7 @@ itoa = "0.4.1"
 tracing = { version = "0.1", default-features = false, features = ["std"] }
 pin-project-lite = "0.2.4"
 tower-service = "0.3"
-tokio = { version = "1", features = ["sync"] }
+tokio = { version = "=1.14.0", features = ["sync"] }
 want = "0.3"
 
 # Optional
@@ -52,7 +52,7 @@ pretty_env_logger = "0.4"
 spmc = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-tokio = { version = "1", features = [
+tokio = { version = "=1.14.0", features = [
     "fs",
     "macros",
     "io-std",
@@ -102,8 +102,23 @@ runtime = [
     "tokio/rt",
     "tokio/time",
 ]
+
 tcp = [
     "socket2",
+    "tokio/net",
+    "tokio/rt",
+    "tokio/time",
+]
+
+# this is equivalent to tcp feature but it won't
+# enable hyper's default HttpConnector and also
+# some stuff that tcp enables for server side.
+#
+# hyper's default HttpConnector and some server side code
+# requires socket2 which doesn't compile on SGX.
+# We eventually want to remove this and support hyper's
+# defaults on SGX
+tcp-sgx = [
     "tokio/net",
     "tokio/rt",
     "tokio/time",
@@ -253,3 +268,7 @@ required-features = ["full"]
 name = "server"
 path = "tests/server.rs"
 required-features = ["full"]
+
+[patch.crates-io]
+tokio = { git = "https://github.com/mzohreva/tokio", branch = "mz/sgx-port-1.14.0" }
+mio = { git = "https://github.com/mzohreva/mio", branch = "mz/sgx-port-0.7.6" }
