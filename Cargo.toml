@@ -99,11 +99,24 @@ stream = []
 # Tokio support
 runtime = [
     "tcp",
+	# added http-connector here to keep the the
+	# things exposed by runtime feature same.
+	"http-connector",
     "tokio/rt",
     "tokio/time",
 ]
+
+http-connector = ["socket2"]
+
+# socket2 was removed from here as it was causing
+# issues with sgx.
+# It was needed by hyper's default HttpConnector
+# and some tcp code in server/tcp.rs
+# For HttpConnector, we segregated it into a separate
+# feature above called `http-connector`.
+# If one wants to use the server/tcp functionality,
+# they need to enable both tcp and socket2 feature
 tcp = [
-    "socket2",
     "tokio/net",
     "tokio/rt",
     "tokio/time",

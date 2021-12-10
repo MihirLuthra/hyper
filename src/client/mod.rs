@@ -48,7 +48,7 @@
 //! # fn main () {}
 //! ```
 
-#[cfg(feature = "tcp")]
+#[cfg(feature = "http-connector")]
 pub use self::connect::HttpConnector;
 
 pub mod connect;

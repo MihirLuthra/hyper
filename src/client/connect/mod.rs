@@ -84,7 +84,7 @@ use std::fmt;
 use ::http::Extensions;
 
 cfg_feature! {
-    #![feature = "tcp"]
+    #![feature = "http-connector"]
 
     pub use self::http::{HttpConnector, HttpInfo};
 

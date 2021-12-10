@@ -150,7 +150,7 @@
 pub mod accept;
 pub mod conn;
 mod server;
-#[cfg(feature = "tcp")]
+#[cfg(all(feature = "tcp", feature = "socket2"))]
 mod tcp;
 
 pub use self::server::Server;
